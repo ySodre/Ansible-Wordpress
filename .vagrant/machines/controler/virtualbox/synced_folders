@@ -1,0 +1,1 @@
+{"virtualbox":{"/var/pj-wordpress":{"guestpath":"/var/pj-wordpress","hostpath":"C:/Users/yuri.sodre/Documents/Projetos/ProjetoAnsible/pj-wordpress","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/Users/yuri.sodre/Documents/Projetos/ProjetoAnsible","disabled":false,"__vagrantfile":true}}}

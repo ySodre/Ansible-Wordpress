@@ -1,0 +1,28 @@
+---
+- hosts: all 
+  tasks:
+   - name: 'Instalando dependências do sistema operacional'
+     apt: 
+       name: ['php', 'apache2', 'libapache2-mod-php', 'php-gd', 'mariadb-server', 'php-mysql','pip']
+       state: latest
+     become: yes
+   - name: 'Instalando dependências do python'
+     pip:
+       name: PyMySQL
+       state: present
+   - name: 'Criando o banco'
+     mysql_db:
+        name: wordpress_db
+        login_user: root
+        login_password: "password"
+        state: present
+     become: true
+   - name: Create database user with name 'bob' and password '12345' with all database privileges
+     mysql_user:
+        login_user: root
+        login_password: "password"
+        name: bob
+        password: 12345
+        priv: 'wordpress_db.*:ALL'
+        state: present
+   

@@ -1,5 +1,33 @@
 ---
-- hosts: all 
+- hosts: database
+
+  tasks:
+
+   - name: 'Instalando dependências do sistema operacional'
+     apt: 
+       name: ['mariadb-server', 'pip', python3-mysqldb, mariadb-client]
+       state: latest
+     become: yes
+
+   - name: 'Criando o banco de dados wordpress_db'
+     mysql_db:
+        name: wordpress_db
+        login_user: root
+        login_password: "Cur1@9"
+        state: present
+     become: true   
+
+   - name: 'Criando usuário do banco de dados wordpress'
+     mysql_user:
+        login_user: root
+        login_password: "Cur1@9"
+        name: bob
+        password: 12345
+        priv: 'wordpress_db.*:ALL'
+        state: present 
+     become: true
+ 
+- hosts: wordpress 
   handlers:
    - name: restart apache
      service:
@@ -9,7 +37,7 @@
   tasks:
    - name: 'Instalando dependências do sistema operacional'
      apt: 
-       name: ['php', 'apache2', 'libapache2-mod-php', 'php-gd', 'mariadb-server', 'php-mysql','pip']
+       name: ['php', 'apache2', 'libapache2-mod-php', 'php-gd', 'pip']
        state: latest
      become: yes
 
@@ -17,23 +45,6 @@
      pip:
        name: PyMySQL
        state: present
-
-   - name: 'Criando o banco'
-     mysql_db:
-        name: wordpress_db
-        login_user: root
-        login_password: "password"
-        state: present
-     become: true
-
-   - name: Create database user with name 'bob' and password '12345' with all database privileges
-     mysql_user:
-        login_user: root
-        login_password: "password"
-        name: bob
-        password: 12345
-        priv: 'wordpress_db.*:ALL'
-        state: present   
 
    - name: Baixando arquivo de instalação do Wordpress
      get_url:

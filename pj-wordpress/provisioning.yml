@@ -1,5 +1,11 @@
 ---
 - hosts: database
+  handlers:
+   - name: restart mysql
+     service:
+        name: mysql
+        state: restarted
+     become: yes
 
   tasks:
 
@@ -25,7 +31,20 @@
         password: 12345
         priv: 'wordpress_db.*:ALL'
         state: present 
-     become: true
+        host: "{{ item }}"
+     become: true   
+     with_items:
+      - 'localhost'
+      - '127.0.0.1'
+      - '192.168.10.137'
+      - '192.168.10.140'
+   - name: 'Configurando conexões remotas'
+     copy:
+       src: 'files/50-server.cnf'
+       dest: '/etc/mysql/mariadb.conf.d/50-server.cnf'
+     notify:
+      - restart mysql
+     become: true   
  
 - hosts: wordpress 
   handlers:
@@ -60,7 +79,7 @@
 
    - name: 'Copiando arquivo necessário'
      copy:
-      src: '/var/www/wordpress/wp-config-sample.php'
+      src: '/var/www/wordpress/wp-config.php'
       dest: /etc/sudoers.edit
       remote_src: yes
      become: yes
@@ -74,6 +93,7 @@
      - { regex: 'database_name_here', value: 'wordpress_db'}
      - { regex: 'username_here', value: 'bob'}
      - { regex: 'password_here', value: '12345'}
+     - { regex: 'localhost', value: '192.168.10.101'}
      become: yes
 
    - name: 'Configura Apache para servir o Wordpress'

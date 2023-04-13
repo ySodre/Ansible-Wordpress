@@ -1,0 +1,13 @@
+---
+- name: 'Instalando dependências do sistema operacional'
+  apt: 
+      name: ['php', 'apache2', 'libapache2-mod-php', 'php-gd', 'pip']
+      state: latest
+  become: true
+
+- name: 'Instalando dependências do python'
+  pip:
+    name: PyMySQL
+    state: present
+
+

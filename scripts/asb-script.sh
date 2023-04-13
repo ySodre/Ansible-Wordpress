@@ -1,9 +1,10 @@
 #!/bin/bash
 
-apt update -y && apt upgrade -y
-apt install ansible -y
-apt install python3 -y
-cp .vagrant/machines/web/virtualbox/private_key /home/vagrant/.ssh/web_key
-cp .vagrant/machines/db/virtualbox/private_key /home/vagrant/.ssh/db_key
-chmod 400 /home/vagrant/.ssh/web_key
-chmod 400 /home/vagrant/.ssh/db_key
+#apt update -y && apt upgrade -y
+#apt install ansible -y
+#apt install python3 -y
+#Aplicação
+echo -e "Host 192.168.10.105\n  StrictHostKeyChecking no" >> /home/vagrant/.ssh/config
+#Banco de dados
+echo -e "Host 192.168.10.106\n  StrictHostKeyChecking no" >> /home/vagrant/.ssh/config
+chmod 600 /home/vagrant/.ssh/vagrant_key

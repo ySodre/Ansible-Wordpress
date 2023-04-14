@@ -1,11 +1,11 @@
 ---
-- name: Baixando arquivo de instalação do Wordpress
+- name: 'Baixando arquivo de instalação do Wordpress'
   get_url:
    url: 'http://wordpress.org/latest.tar.gz'
    dest: '/tmp/wordpress.tar.gz'
   become: true
 
-- name: 'Descompacta o wordpress'
+- name: 'Descompactando arquivos do Wordpress'
   unarchive:
     src:  '/tmp/wordpress.tar.gz'
     dest: /var/www/
@@ -19,7 +19,7 @@
      remote_src: yes
   become: true
 
-- name: 'Configura o wp-config com as entradas do banco de dados'
+- name: 'Configurando a conexão com o banco'
   replace:
     path: "{{wp_installation_dir}}/wp-config.php"
     regexp: "{{ item.regex }}"
@@ -31,7 +31,7 @@
   - { regex: 'localhost', value: "{{wp_db_ip}}"}
   become: true
 
-- name: 'Configura Apache para servir o Wordpress'
+- name: 'Ajustando configurações do apache'
   template:
     src: 'templates/000-default.conf.j2'
     dest: '/etc/apache2/sites-available/000-default.conf'

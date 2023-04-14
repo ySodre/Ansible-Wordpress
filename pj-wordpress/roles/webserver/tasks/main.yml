@@ -1,7 +1,12 @@
 ---
-- name: 'Instalando dependências do sistema operacional'
+- name: Alterando o hostname
+  hostname:
+    name: web-01
+  become: true
+
+- name: 'Instalando pacotes necessários'
   apt: 
-      name: ['php', 'apache2', 'libapache2-mod-php', 'php-gd', 'pip']
+      name: ['php', 'apache2', 'libapache2-mod-php', 'php-gd', 'pip', php-mysqli]
       state: latest
   become: true
 
